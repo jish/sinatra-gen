@@ -115,3 +115,15 @@ Rake::TestTask.new do |test|
   test.pattern = "test/**/*_test.rb"
 end
 ```
+
+An `.autotest` configuration file
+
+```ruby
+# .autotest
+require 'autotest/restart'
+require 'autotest/suffix'
+
+Autotest.add_hook :initialize do |at|
+  at.testlib = "minitest/autorun"
+end
+```

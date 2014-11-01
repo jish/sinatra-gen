@@ -71,4 +71,13 @@ group :test do
 end
 RUBY
 
+cat <<RUBY > .autotest
+require 'autotest/restart'
+require 'autotest/suffix'
+
+Autotest.add_hook :initialize do |at|
+  at.testlib = "minitest/autorun"
+end
+RUBY
+
 bundle install
