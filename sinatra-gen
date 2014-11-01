@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+name=$1
+klass=`echo ${name:0:1} | tr a-z A-Z`${name:1}
+
+mkdir -p lib
+mkdir -p test
+
+cat <<RUBY > config.ru
+\$LOAD_PATH.unshift("lib") unless \$LOAD_PATH.include?("lib")
+require '${name}'
+
+run ${klass}
+RUBY
+
+cat <<RUBY > "lib/${name}.rb"
+require 'sinatra/base'
+
+class ${klass} < Sinatra::Base
+
+  get "/" do
+    [200, {}, ["Hello World!"]]
+  end
+
+end
+RUBY
+
+cat <<RUBY > "test/${name}_test.rb"
+require 'minitest/autorun'
+require 'rack/test'
+require '${name}'
+
+class ${klass}Test < MiniTest::Test
+
+  include Rack::Test::Methods
+
+  def app
+    ${klass}.new
+  end
+
+  def test_root_route
+    get "/"
+    assert last_response.ok?, "Must respond with '200 OK' at the root route"
+  end
+
+end
+RUBY
+
+cat <<RUBY > Rakefile
+require 'rake/testtask'
+
+Rake::TestTask.new do |test|
+  test.libs << "test" << "lib"
+  test.pattern = "test/**/*_test.rb"
+end
+RUBY
+
+cat <<RUBY > Gemfile
+source "https://rubygems.org"
+
+gem "sinatra"
+
+group :development do
+  gem "rake"
+end
+
+group :test do
+  gem "autotest"
+  gem "autotest-suffix"
+  gem "rack-test"
+end
+RUBY
+
+bundle install
