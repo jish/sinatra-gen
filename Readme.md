@@ -7,6 +7,18 @@ script will generate a simple Sinatra app.
 [1]: https://www.ruby-lang.org/en/
 [2]: https://github.com/sinatra/sinatra/
 
+## Installation
+
+The `sinatra-gen` script will run on its own as a standalone execuatable. You can clone this repository, or download the script.
+
+To clone:
+
+    $ git clone git@github.com:jish/sinatra-gen.git
+
+To download:
+
+    $ curl "https://raw.githubusercontent.com/jish/sinatra-gen/master/sinatra-gen" > ~/bin/sinatra-gen
+
 ### Generating a new project
 
 `sinatra-gen` generates a Sinatra project in the current directory.
